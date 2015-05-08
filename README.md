@@ -3,8 +3,19 @@
 A logging framework that wraps around SLF4J and Crashlytics (Fabric.io)
 
 ## Download
+* ###If you are including including the library off jCenter:
+```
+    repositories {
+        jcenter()
+    }
+    ...
+    compile(group: 'unified-logger-public', name: 'unified-logger', version: 'versionNumber', ext: 'aar') {
+        transitive = true;
+    }
+```
 
-* Download the aar from Confluence, or clone the project and build it yourself
+* ###If you want to include the library locally:
+* Download the aar from GitHub, or clone the project and build it yourself
 * Copy the aar into your project, for example the 'libs' folder
 * Add the folder (that you copied the aar into) in your repositories. For example, if you have added Fabric.io to your project and copied the aar in libs it would look like:
 ```
