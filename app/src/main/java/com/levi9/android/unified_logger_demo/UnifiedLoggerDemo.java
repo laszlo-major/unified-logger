@@ -3,12 +3,8 @@ package com.levi9.android.unified_logger_demo;
 import com.crashlytics.android.Crashlytics;
 import com.levi9.android.unified_logger.UnifiedLogger;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,7 +12,7 @@ import android.view.View;
 import io.fabric.sdk.android.Fabric;
 
 
-public class UnifiedLoggerDemo extends ActionBarActivity {
+public class UnifiedLoggerDemo extends AppCompatActivity {
 
     private static final UnifiedLogger LOG = UnifiedLogger.getUnifiedLogger(UnifiedLoggerDemo.class);
 
@@ -29,8 +25,8 @@ public class UnifiedLoggerDemo extends ActionBarActivity {
         //You can use this method to disable crashlytics in a specific flavor. Careful, BuildConfig.DEBUG is not always set correctly.
         //Disabled so we can remove secrets in the public
         //will instant crash without this
-        //Crashlytics crashlytics = new Crashlytics.Builder().disabled(false).build();
-        //Fabric.with(this, crashlytics);
+        Crashlytics crashlytics = new Crashlytics.Builder().disabled(false).build();
+        Fabric.with(this, crashlytics);
 
         setContentView(R.layout.activity_unified_logger_demo);
         LOG.d(TAG, "MSG", true);
@@ -78,7 +74,7 @@ public class UnifiedLoggerDemo extends ActionBarActivity {
         try {
             throw new ArithmeticException("panic!");
         } catch (Exception ex) {
-            LOG.e(TAG, ex.toString(), true);
+            LOG.e(TAG, ex.getMessage(), true, ex);
             throw new RuntimeException("crash");
         }
     }

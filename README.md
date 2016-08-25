@@ -1,6 +1,6 @@
 # Unified Logger
 
-A logging framework that wraps around SLF4J and Crashlytics (Fabric.io)
+A logging framework that wraps around Timber and Crashlytics (Fabric.io)
 
 ## Download
 * ###If you are including including the library off jCenter:
@@ -32,9 +32,7 @@ compile name: 'unified-logger', ext: 'aar'
 ```
 * Add the dependencies of the library:
 ```
-    compile 'org.slf4j:slf4j-api:1.7.10'
-    compile 'com.github.tony19:logback-android-core:1.1.1-3'
-    compile 'com.github.tony19:logback-android-classic:1.1.1-3'
+    compile 'com.jakewharton.timber:timber:4.3.0'
 ```
 
 
@@ -44,7 +42,6 @@ compile name: 'unified-logger', ext: 'aar'
 * WRITE_EXTERNAL_STORAGE would be needed if you wanted to write logs on the SD card, like the demo application does.
 
 ## Configuration
-* You need to configure the SLF4J with a configuration file **Logback.xml** that goes in the /assets folder. An example configuration file is provided in the sample project, and more detailed explanation is provided at [logback-android]
 * Fabric.io has to be added to the project, as every project must acquire it's own unique API key for Crashlytics to work. This can be done easily via the [Fabric.io] Android Studio plugin.
 
 ## Usage
@@ -59,8 +56,7 @@ private static final UnifiedLogger LOG = UnifiedLogger.getUnifiedLogger(YourClas
 LOG.d(TAG, "your message", true);
 ```
 
-This will log a message at the DEBUG priority level into both SLF4J and Crashlytics. Logs that were passed into Crashlytics (with true) will accompany the crash report that you get on the site, if there's been a crash.
+This will log a message at the DEBUG priority level into both LogCat and Crashlytics. Logs that were passed into Crashlytics (with true) will accompany the crash report that you get on the site, if there's been a crash.
 
 
-[logback-android]:https://github.com/tony19/logback-android
 [Fabric.io]:https://get.fabric.io/

@@ -2,15 +2,14 @@ package com.levi9.android.unified_logger;
 
 import com.crashlytics.android.Crashlytics;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import android.util.Log;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
+
+import timber.log.Timber;
 
 /**
  * Created by l.major on 2/3/2015.
@@ -24,27 +23,22 @@ public class UnifiedLogger {
     }
 
     /**
-     * Holds an instance of a slf4j.Logger relevant to the particular instance of UnifiedLogger
+     * Holds the classname to properly tag messages
      */
-    private Logger classLogger;
 
     /**
-     * Return a UnifiedLogger containing a properly named slf4j.Logger
+     * Return a UnifiedLogger with timestamp
      *
-     * @param className
-     *         The name of the logger.
      */
-    private UnifiedLogger(String className) {
-        classLogger = LoggerFactory.getLogger(className);
+    private UnifiedLogger() {
         mDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
         mDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
     }
 
     /**
-     * Return a logger named corresponding to the class passed as parameter, using
-     * the statically bound {@link org.slf4j.ILoggerFactory} instance.
+     * Return a logger named corresponding to the class passed as parameter
      *
-     * @param clazz the returned logger will be named after clazz
+     * @param clazz the returned logger will be tagged after clazz
      *
      * @return logger
      */
@@ -56,105 +50,127 @@ public class UnifiedLogger {
         if (className == null) {
             throw new IllegalArgumentException("name argument cannot be null");
         }
-        return new UnifiedLogger(className);
+        return getUniFiedLogger();
 
     }
 
+    /**
+     * New contructor that doesn't rely on getting tag from class, since
+     * all methods take tag
+     * @return logger
+     */
+    public static UnifiedLogger getUniFiedLogger() {
+        if (Timber.treeCount() == 0) {
+            Timber.plant(new LogCatTree());
+        }
+        return new UnifiedLogger();
+    }
+
     public void d(String tag, String msg, boolean uploadToCrashlytics) {
-        classLogger.debug(msg);
+        logToTimber(Log.DEBUG, tag, msg, null);
         if (uploadToCrashlytics) {
             Crashlytics.log(Log.DEBUG, appendTimeStamp(tag), msg);
         }
     }
 
     public void d(String tag, String msg, boolean uploadToCrashlytics, Throwable tr) {
-        classLogger.debug(msg, tr);
+        logToTimber(Log.DEBUG, tag, msg, tr);
         if (uploadToCrashlytics) {
             Crashlytics.logException(tr);
         }
     }
 
     public void v(String tag, String msg, boolean uploadToCrashlytics) {
-        classLogger.trace(msg);
+        logToTimber(Log.VERBOSE, tag, msg, null);
         if (uploadToCrashlytics) {
             Crashlytics.log(Log.VERBOSE, appendTimeStamp(tag), msg);
         }
     }
 
     public void v(String tag, String msg, boolean uploadToCrashlytics, Throwable tr) {
-        classLogger.trace(msg, tr);
+        logToTimber(Log.VERBOSE, tag, msg, tr);
         if (uploadToCrashlytics) {
             Crashlytics.logException(tr);
         }
     }
 
     public void e(String tag, String msg, boolean uploadToCrashlytics) {
-        classLogger.error(msg);
+        logToTimber(Log.ERROR, tag, msg, null);
         if (uploadToCrashlytics) {
             Crashlytics.log(Log.ERROR, appendTimeStamp(tag), msg);
         }
     }
 
     public void e(String tag, String msg, boolean uploadToCrashlytics, Throwable tr) {
-        classLogger.error(msg);
+        logToTimber(Log.ERROR, tag, msg, tr);
         if (uploadToCrashlytics) {
             Crashlytics.logException(tr);
         }
     }
 
     public void w(String tag, String msg, boolean uploadToCrashlytics) {
-        classLogger.warn(msg);
+        logToTimber(Log.WARN, tag, msg, null);
         if (uploadToCrashlytics) {
             Crashlytics.log(Log.WARN, appendTimeStamp(tag), msg);
         }
     }
 
     public void w(String tag, String msg, boolean uploadToCrashlytics, Throwable tr) {
-        classLogger.warn(msg, tr);
+        logToTimber(Log.WARN, tag, msg, tr);
         if (uploadToCrashlytics) {
             Crashlytics.logException(tr);
         }
     }
 
     public void w(String tag, boolean uploadToCrashlytics, Throwable tr) {
-        classLogger.warn(tag, tr);
+        logToTimber(Log.WARN, tag, "", tr);
         if (uploadToCrashlytics) {
             Crashlytics.logException(tr);
         }
     }
 
     public void wtf(String tag, String msg, boolean uploadToCrashlytics) {
-        classLogger.error(msg);
+        logToTimber(Log.ASSERT, tag, msg, null);
         if (uploadToCrashlytics) {
             Crashlytics.log(Log.ERROR, appendTimeStamp(tag), msg);
         }
     }
 
     public void wtf(String tag, String msg, boolean uploadToCrashlytics, Throwable tr) {
-        classLogger.error(msg, tr);
+        logToTimber(Log.ASSERT, tag, msg, tr);
         if (uploadToCrashlytics) {
             Crashlytics.logException(tr);
         }
     }
 
     public void wtf(String tag, boolean uploadToCrashlytics, Throwable tr) {
-        classLogger.error(tag, tr);
+        logToTimber(Log.ASSERT, tag, "", tr);
         if (uploadToCrashlytics) {
             Crashlytics.logException(tr);
         }
     }
 
     public void i(String tag, String msg, boolean uploadToCrashlytics) {
-        classLogger.info(msg);
+        logToTimber(Log.INFO, tag, msg, null);
         if (uploadToCrashlytics) {
             Crashlytics.log(Log.VERBOSE, appendTimeStamp(tag), msg);
         }
     }
 
     public void i(String tag, String msg, boolean uploadToCrashlytics, Throwable tr) {
-        classLogger.info(msg, tr);
+        logToTimber(Log.INFO, tag, msg, tr);
         if (uploadToCrashlytics) {
             Crashlytics.logException(tr);
         }
+    }
+
+    private void logToTimber(int priority, String tag, String msg, Throwable throwable) {
+        Timber.tag(tag);
+        if (throwable != null) {
+            Timber.log(priority, throwable, msg);
+        } else {
+            Timber.log(priority, msg);
+        }
+
     }
 }
