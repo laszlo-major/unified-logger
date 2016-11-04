@@ -61,7 +61,7 @@ public class UnifiedLogger {
      */
     public static UnifiedLogger getUniFiedLogger() {
         if (Timber.treeCount() == 0) {
-            Timber.plant(new LogCatTree());
+            Log.e("UNIFIEDLOGGER", "No trees have been planted");
         }
         return new UnifiedLogger();
     }
