@@ -50,7 +50,7 @@ public class UnifiedLogger {
         if (className == null) {
             throw new IllegalArgumentException("name argument cannot be null");
         }
-        return getUniFiedLogger();
+        return getUnifiedLogger();
 
     }
 
@@ -59,107 +59,104 @@ public class UnifiedLogger {
      * all methods take tag
      * @return logger
      */
-    public static UnifiedLogger getUniFiedLogger() {
-        if (Timber.treeCount() == 0) {
-            Log.e("UNIFIEDLOGGER", "No trees have been planted");
-        }
+    public static UnifiedLogger getUnifiedLogger() {
         return new UnifiedLogger();
     }
 
     public void d(String tag, String msg, boolean uploadToCrashlytics) {
         logToTimber(Log.DEBUG, tag, msg, null);
-        if (uploadToCrashlytics) {
+        if (uploadToCrashlytics && Timber.treeCount() > 0) {
             Crashlytics.log(Log.DEBUG, appendTimeStamp(tag), msg);
         }
     }
 
     public void d(String tag, String msg, boolean uploadToCrashlytics, Throwable tr) {
         logToTimber(Log.DEBUG, tag, msg, tr);
-        if (uploadToCrashlytics) {
+        if (uploadToCrashlytics && Timber.treeCount() > 0) {
             Crashlytics.logException(tr);
         }
     }
 
     public void v(String tag, String msg, boolean uploadToCrashlytics) {
         logToTimber(Log.VERBOSE, tag, msg, null);
-        if (uploadToCrashlytics) {
+        if (uploadToCrashlytics && Timber.treeCount() > 0) {
             Crashlytics.log(Log.VERBOSE, appendTimeStamp(tag), msg);
         }
     }
 
     public void v(String tag, String msg, boolean uploadToCrashlytics, Throwable tr) {
         logToTimber(Log.VERBOSE, tag, msg, tr);
-        if (uploadToCrashlytics) {
+        if (uploadToCrashlytics && Timber.treeCount() > 0) {
             Crashlytics.logException(tr);
         }
     }
 
     public void e(String tag, String msg, boolean uploadToCrashlytics) {
         logToTimber(Log.ERROR, tag, msg, null);
-        if (uploadToCrashlytics) {
+        if (uploadToCrashlytics && Timber.treeCount() > 0) {
             Crashlytics.log(Log.ERROR, appendTimeStamp(tag), msg);
         }
     }
 
     public void e(String tag, String msg, boolean uploadToCrashlytics, Throwable tr) {
         logToTimber(Log.ERROR, tag, msg, tr);
-        if (uploadToCrashlytics) {
+        if (uploadToCrashlytics && Timber.treeCount() > 0) {
             Crashlytics.logException(tr);
         }
     }
 
     public void w(String tag, String msg, boolean uploadToCrashlytics) {
         logToTimber(Log.WARN, tag, msg, null);
-        if (uploadToCrashlytics) {
+        if (uploadToCrashlytics && Timber.treeCount() > 0) {
             Crashlytics.log(Log.WARN, appendTimeStamp(tag), msg);
         }
     }
 
     public void w(String tag, String msg, boolean uploadToCrashlytics, Throwable tr) {
         logToTimber(Log.WARN, tag, msg, tr);
-        if (uploadToCrashlytics) {
+        if (uploadToCrashlytics && Timber.treeCount() > 0) {
             Crashlytics.logException(tr);
         }
     }
 
     public void w(String tag, boolean uploadToCrashlytics, Throwable tr) {
         logToTimber(Log.WARN, tag, "", tr);
-        if (uploadToCrashlytics) {
+        if (uploadToCrashlytics && Timber.treeCount() > 0) {
             Crashlytics.logException(tr);
         }
     }
 
     public void wtf(String tag, String msg, boolean uploadToCrashlytics) {
         logToTimber(Log.ASSERT, tag, msg, null);
-        if (uploadToCrashlytics) {
+        if (uploadToCrashlytics && Timber.treeCount() > 0) {
             Crashlytics.log(Log.ERROR, appendTimeStamp(tag), msg);
         }
     }
 
     public void wtf(String tag, String msg, boolean uploadToCrashlytics, Throwable tr) {
         logToTimber(Log.ASSERT, tag, msg, tr);
-        if (uploadToCrashlytics) {
+        if (uploadToCrashlytics && Timber.treeCount() > 0) {
             Crashlytics.logException(tr);
         }
     }
 
     public void wtf(String tag, boolean uploadToCrashlytics, Throwable tr) {
         logToTimber(Log.ASSERT, tag, "", tr);
-        if (uploadToCrashlytics) {
+        if (uploadToCrashlytics && Timber.treeCount() > 0) {
             Crashlytics.logException(tr);
         }
     }
 
     public void i(String tag, String msg, boolean uploadToCrashlytics) {
         logToTimber(Log.INFO, tag, msg, null);
-        if (uploadToCrashlytics) {
+        if (uploadToCrashlytics && Timber.treeCount() > 0) {
             Crashlytics.log(Log.VERBOSE, appendTimeStamp(tag), msg);
         }
     }
 
     public void i(String tag, String msg, boolean uploadToCrashlytics, Throwable tr) {
         logToTimber(Log.INFO, tag, msg, tr);
-        if (uploadToCrashlytics) {
+        if (uploadToCrashlytics && Timber.treeCount() > 0) {
             Crashlytics.logException(tr);
         }
     }
